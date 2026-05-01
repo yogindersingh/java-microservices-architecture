@@ -23,4 +23,4 @@ spring:
     init:
       #default file value is schema.sql for schema and datacustom.sql for datafile
       schema-locations: classpath:schemacustom.sql
-      data-locations: classpath:datacustom.sql
+#      data-locations: classpath:datacustom.sql
