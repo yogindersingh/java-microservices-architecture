@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8090
 
 application:
   name: "@project.artifactId@"
@@ -23,4 +23,3 @@ spring:
     init:
       #default file value is schema.sql for schema and data.sql for datafile
       schema-locations: classpath:schemacustom.sql
-#      data-locations: classpath:datacustom.sql
