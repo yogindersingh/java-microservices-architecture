@@ -1,2 +1,3 @@
-# java-microservices-architecture
-To be updated
+# Java-microservices-architecture
+
+mvn spring-boot:run
