@@ -25,6 +25,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>
+                                build-image
+                            </goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <image>
                     <name>${dockerhub.username}/loans:${project.version}</name>
