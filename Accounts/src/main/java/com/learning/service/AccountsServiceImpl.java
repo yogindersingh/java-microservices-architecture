@@ -11,6 +11,10 @@ import com.learning.mapper.MapperUtil;
 import com.learning.repository.AccountRepository;
 import com.learning.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -56,6 +60,10 @@ public class AccountsServiceImpl implements AccountsService {
     AccountsDto accountsDto = MapperUtil.mapAccountsToAccountsDto(accounts);
     CustomerDto customerDto = MapperUtil.mapCustomerToCustomerDto(customer);
     customerDto.setAccountsDto(accountsDto);
+    //fetch by mobile number using paging and sorting
+//    Pageable pageable = PageRequest.of(1, 5, Sort.by("accountNumber").descending());
+//    Page<Customer> resp = customerRepository.findByMobileNumber(mobileNumber,pageable);
+
     return new ResponseDto(customerDto,HttpStatus.OK);
   }
 
