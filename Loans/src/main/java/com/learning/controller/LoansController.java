@@ -2,6 +2,7 @@ package com.learning.controller;
 
 import com.learning.dto.LoanDto;
 import com.learning.dto.ErrorResponseDto;
+import com.learning.dto.LoansContactInfoDto;
 import com.learning.dto.ResponseDto;
 import com.learning.service.ILoansService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +13,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Size;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +31,15 @@ public class LoansController {
 
   @Autowired
   ILoansService iLoansService;
+
+  @Value("${build.info}")
+  private String buildInfo;
+
+  @Autowired
+  private Environment environment;
+
+  @Autowired
+  private LoansContactInfoDto loansContactInfoDto;
 
   @Operation(description = "Create Loan")
   @PostMapping("/create/{mobileNumber}")
@@ -49,4 +61,21 @@ public class LoansController {
     return ResponseEntity.ok(new ResponseDto(loanDto, HttpStatus.OK));
   }
 
+  @Operation(description = "Fetch build information")
+  @GetMapping("/build-info")
+  public ResponseEntity<ResponseDto> getBuildInfo() {
+    return new ResponseEntity<>(new ResponseDto(buildInfo,HttpStatus.OK), HttpStatus.OK);
+  }
+
+  @Operation(description = "Fetch java version")
+  @GetMapping("/java-version")
+  public ResponseEntity<ResponseDto> getJavaVersion() {
+    return new ResponseEntity<>(new ResponseDto(environment.getProperty("java.version"),HttpStatus.OK), HttpStatus.OK);
+  }
+
+  @Operation(description = "Fetch contact information")
+  @GetMapping("/contact-info")
+  public ResponseEntity<ResponseDto> getContactInfo() {
+    return new ResponseEntity<>(new ResponseDto(loansContactInfoDto,HttpStatus.OK), HttpStatus.OK);
+  }
 }

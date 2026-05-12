@@ -24,3 +24,14 @@ spring:
       #default file value is schema.sql for schema and data.sql for datafile
       schema-locations: classpath:schemacustom.sql
 #      data-locations: classpath:datacustom.sql
+
+build:
+  info: "@project.version@"
+
+accounts:
+  message: "Welcome to accounts related local APIs "
+  contactDetails:
+    name: "Yogindersingh - Developer"
+  onCallSupport:
+    - +91 1234567890
+    - +91 0987654321
