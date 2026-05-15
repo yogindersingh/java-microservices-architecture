@@ -1,0 +1,10 @@
+build:
+  info: "prod-config"
+
+loans:
+  message: "Welcome to loans related prod APIs "
+  contactDetails:
+    name: "Yogindersingh - Developer"
+  onCallSupport:
+    - +91 1234567890
+    - +91 0987654321

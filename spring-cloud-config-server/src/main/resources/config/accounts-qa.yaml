@@ -1,0 +1,10 @@
+build:
+  info: "qa-config"
+
+accounts:
+  message: "Welcome to accounts related qa APIs "
+  contactDetails:
+    name: "Yogindersingh - Developer"
+  onCallSupport:
+    - +91 1234567890
+    - +91 0987654321

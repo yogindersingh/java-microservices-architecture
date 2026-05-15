@@ -6,6 +6,8 @@ application:
   version: "@project.version@"
 
 spring:
+  application:
+    name: "cards"
   datasource:
     url: jdbc:h2:mem:testdb
     driverClassName: org.h2.Driver
@@ -23,14 +25,7 @@ spring:
     init:
       #default file value is schema.sql for schema and data.sql for datafile
       schema-locations: classpath:schemacustom.sql
-
-build:
-  info: "@project.version@"
-
-cards:
-  message: "Welcome to accounts related local APIs "
-  contactDetails:
-    name: "Yogindersingh - Developer"
-  onCallSupport:
-    - +91 1234567890
-    - +91 0987654321
+  profiles:
+    active: "qa"
+  config:
+    import: "configserver:http://localhost:8071"

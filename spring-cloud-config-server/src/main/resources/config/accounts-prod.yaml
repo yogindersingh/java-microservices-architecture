@@ -1,0 +1,10 @@
+build:
+  info: "prod-config"
+
+accounts:
+  message: "Welcome to accounts related prod APIs "
+  contactDetails:
+    name: "Yogindersingh - Developer"
+  onCallSupport:
+    - +91 1234567890
+    - +91 0987654321

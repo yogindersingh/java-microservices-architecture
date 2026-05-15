@@ -1,0 +1,10 @@
+build:
+  info: "default-config"
+
+cards:
+  message: "Welcome to cards related default APIs "
+  contactDetails:
+    name: "Yogindersingh - Developer"
+  onCallSupport:
+    - +91 1234567890
+    - +91 0987654321

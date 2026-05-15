@@ -1,0 +1,10 @@
+build:
+  info: "qa-config"
+
+loans:
+  message: "Welcome to loans related qa APIs "
+  contactDetails:
+    name: "Yogindersingh - Developer"
+  onCallSupport:
+    - +91 1234567890
+    - +91 0987654321
