@@ -2,12 +2,25 @@ spring:
   application:
     name: spring-cloud-config-server
   profiles:
-    active: native
+    active: git
+  #    active: native
   cloud:
     config:
       server:
-        native:
-          search-locations: "classpath:/config"
+        git:
+          clone-on-start: true
+          default-label: main
+          force-pull: true
+          timeout: 5
+          uri: "https://github.com/yogindersingh/config-properties.git"
+#        native:
+#          search-locations: "classpath:/config"
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
+
 server:
   port: 8071
 

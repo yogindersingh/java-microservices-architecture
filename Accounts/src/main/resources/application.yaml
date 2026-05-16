@@ -29,4 +29,15 @@ spring:
       schema-locations: classpath:schemacustom.sql
   config:
     import: "configserver:http://localhost:8071"
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
 #      data-locations: classpath:datacustom.sql
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
