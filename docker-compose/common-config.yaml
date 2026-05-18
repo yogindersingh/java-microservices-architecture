@@ -1,0 +1,18 @@
+services:
+  network-service:
+    networks:
+      - common-network
+
+  microservice-base-config:
+    extends:
+      service: network-service
+    mem_limit: 700m
+    environment:
+      SPRING_RABBITMQ_HOST: "rabbitmq"
+
+  microservice-configserver-config:
+    extends:
+      service: microservice-base-config
+    environment:
+      SPRING_PROFILES_ACTIVE: default
+      SPRING_CONFIG_IMPORT: configserver:http://spring-cloud-config-server:8071/
