@@ -1,4 +1,22 @@
 services:
+  mysqlDb:
+    image: mysql:latest
+    hostname: mysqlDb
+    container_name: mysql_microservices
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    extends:
+      file: common-config.yaml
+      service: network-service
+    environment:
+      MYSQL_ROOT_PASSWORD: root@1234
+
   rabbitmq:
     image: rabbitmq:3.12-management
     hostname: rabbitmq
@@ -44,9 +62,13 @@ services:
     depends_on:
       spring-cloud-config-server:
         condition: service_healthy
+      mysqlDb:
+        condition: service_healthy
     extends:
       file: common-config.yaml
       service: microservice-configserver-config
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/accountsDb?createDatabaseIfNotExist=true
 
   cards:
     image: yogindersingh634/cards:0.0.1-SNAPSHOT
@@ -56,9 +78,13 @@ services:
     depends_on:
       spring-cloud-config-server:
         condition: service_healthy
+      mysqlDb:
+        condition: service_healthy
     extends:
       file: common-config.yaml
       service: microservice-configserver-config
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/cardsDb?createDatabaseIfNotExist=true
 
   loans:
     image: yogindersingh634/loans:0.0.1-SNAPSHOT
@@ -67,6 +93,8 @@ services:
       - "8090:8090"
     depends_on:
       spring-cloud-config-server:
+        condition: service_healthy
+      mysqlDb:
         condition: service_healthy
     extends:
       file: common-config.yaml
@@ -78,6 +106,7 @@ services:
         -XX:MaxRAMPercentage=70
         -XX:InitialRAMPercentage=40
         -XX:MaxDirectMemorySize=10M
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/loansDb?createDatabaseIfNotExist=true
 
 networks:
   common-network:
