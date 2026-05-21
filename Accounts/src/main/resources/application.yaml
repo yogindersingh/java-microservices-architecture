@@ -44,8 +44,28 @@ spring:
     password: "guest"
 #      data-locations: classpath:datacustom.sql
 
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8070/eureka/
+
 management:
   endpoints:
     web:
       exposure:
         include: "*"
+  endpoint:
+    shutdown:
+      access: unrestricted
+  info:
+    env:
+      enabled: true
+info:
+  app:
+    name: "accounts"
+    description: "Accounts microservice"
+    version: "@project.version@"
