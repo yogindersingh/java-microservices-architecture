@@ -87,7 +87,7 @@ public class AccountsServiceImpl implements AccountsService {
     );
     AccountsDto accountsDto = MapperUtil.mapAccountsToAccountsDto(accounts);
     CustomerDetailsDto customerDetailsDto = MapperUtil.mapCustomerToCustomerDetailsDto(customer);
-    customerDetailsDto.setAccountsDto(accountsDto);
+    customerDetailsDto.setAccountsDetails(accountsDto);
     ResponseEntity<ResponseDto> cards = cardsFeignClient.fetchCard(customer.getMobileNumber());
     customerDetailsDto.setCardsDetails(cards.getBody().getBody());
     ResponseEntity<ResponseDto> loans=loansFeignClient.fetchLoan(customer.getMobileNumber());
