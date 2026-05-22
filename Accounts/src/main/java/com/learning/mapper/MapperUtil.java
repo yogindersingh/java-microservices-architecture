@@ -2,6 +2,7 @@ package com.learning.mapper;
 
 import com.learning.Enum.AccountType;
 import com.learning.dto.AccountsDto;
+import com.learning.dto.CustomerDetailsDto;
 import com.learning.dto.CustomerDto;
 import com.learning.entity.Accounts;
 import com.learning.entity.Customer;
@@ -38,5 +39,12 @@ public class MapperUtil {
     return accountsDto;
   }
 
+  public static CustomerDetailsDto mapCustomerToCustomerDetailsDto(Customer customer) {
+    CustomerDetailsDto customerDetailsDto = new CustomerDetailsDto();
+    customerDetailsDto.setName(customer.getName());
+    customerDetailsDto.setEmail(customer.getEmail());
+    customerDetailsDto.setMobileNumber(customer.getMobileNumber());
+    return customerDetailsDto;
+  }
 
 }

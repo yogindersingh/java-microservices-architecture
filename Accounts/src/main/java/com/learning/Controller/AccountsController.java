@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -83,5 +84,11 @@ public class AccountsController {
   @GetMapping("/contact-info")
   public ResponseEntity<ResponseDto> getContactInfo() {
     return new ResponseEntity<>(new ResponseDto(accountsContactInfoDto,HttpStatus.OK), HttpStatus.OK);
+  }
+
+  @Operation(description = "fetch customer complete details")
+  @GetMapping("/fetchCustomerDetails")
+  public ResponseEntity<ResponseDto> fetchCustomerDetails(@RequestParam(name = "mobileNumber") String mobileNumber) {
+    return new ResponseEntity<>(accountsService.getCustomerDetails(mobileNumber),HttpStatus.OK);
   }
 }

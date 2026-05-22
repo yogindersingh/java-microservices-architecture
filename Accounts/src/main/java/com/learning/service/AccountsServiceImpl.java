@@ -1,6 +1,7 @@
 package com.learning.service;
 
 import com.learning.dto.AccountsDto;
+import com.learning.dto.CustomerDetailsDto;
 import com.learning.dto.CustomerDto;
 import com.learning.dto.ResponseDto;
 import com.learning.entity.Accounts;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -26,6 +28,12 @@ public class AccountsServiceImpl implements AccountsService {
 
   @Autowired
   AccountRepository accountRepository;
+
+  @Autowired
+  CardsFeignClient cardsFeignClient;
+
+  @Autowired
+  LoansFeignClient loansFeignClient;
 
   /**
    *
@@ -42,7 +50,7 @@ public class AccountsServiceImpl implements AccountsService {
     customerRepository.save(customer);
     Accounts accounts = MapperUtil.mapAccountsDtoToAccounts(customerDto.getAccountsDto());
     accounts.setCustomerId(customer.getCustomerId());
-    accounts.setAccountNumber(((long) (Math.random() * 9000000000L) + 1000000000L));
+    accounts.setAccountNumber(((long) (Math.random() * 900000L) + 100000L));
     accountRepository.save(accounts);
     return new ResponseDto("Account Created successfully", HttpStatus.CREATED);
   }
@@ -65,6 +73,26 @@ public class AccountsServiceImpl implements AccountsService {
 //    Page<Customer> resp = customerRepository.findByMobileNumber(mobileNumber,pageable);
 
     return new ResponseDto(customerDto,HttpStatus.OK);
+  }
+
+  @Override
+  public ResponseDto getCustomerDetails(String mobileNumber) {
+    Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(()->
+        new ResourceNotFountException(
+            "Customer not " +
+                "found" +
+                " for mobileNumber ; %s",mobileNumber));
+    Accounts accounts = accountRepository.findByCustomerId(customer.getCustomerId()).orElseThrow(()->
+        new ResourceNotFountException("Account Not found with mobileNumber : {}",mobileNumber)
+    );
+    AccountsDto accountsDto = MapperUtil.mapAccountsToAccountsDto(accounts);
+    CustomerDetailsDto customerDetailsDto = MapperUtil.mapCustomerToCustomerDetailsDto(customer);
+    customerDetailsDto.setAccountsDto(accountsDto);
+    ResponseEntity<ResponseDto> cards = cardsFeignClient.fetchCard(customer.getMobileNumber());
+    customerDetailsDto.setCardsDetails(cards.getBody().getBody());
+    ResponseEntity<ResponseDto> loans=loansFeignClient.fetchLoan(customer.getMobileNumber());
+    customerDetailsDto.setLoansDetails(loans.getBody().getBody());
+    return new  ResponseDto(customerDetailsDto,HttpStatus.OK);
   }
 
 }

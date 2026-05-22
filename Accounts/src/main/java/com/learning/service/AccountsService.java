@@ -11,4 +11,6 @@ public interface AccountsService {
       CustomerDto customerDto);
 
   ResponseDto getAccountByMobileNumber(String mobileNumber);
+
+  ResponseDto getCustomerDetails(String mobileNumber);
 }
