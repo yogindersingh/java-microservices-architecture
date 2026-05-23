@@ -11,7 +11,7 @@ spring:
   datasource:
     username: root
     password: root@1234
-    url: jdbc:mysql://localhost:3306/cardsDb?createDatabaseIfNotExist=true
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/cardsDb?createDatabaseIfNotExist=true}
   jpa:
     show-sql: true
 #  datasource:
@@ -35,7 +35,7 @@ spring:
   profiles:
     active: "qa"
   config:
-    import: "configserver:http://localhost:8071"
+    import: ${SPRING_CONFIG_IMPORT:configserver:http://localhost:8071}
   rabbitmq:
     host: "localhost"
     port: 5672
@@ -49,7 +49,7 @@ eureka:
     fetch-registry: true
     register-with-eureka: true
     service-url:
-      defaultZone: http://localhost:8070/eureka/
+      defaultZone: ${EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE:http://localhost:8070/eureka/}
 
 management:
   endpoints:
