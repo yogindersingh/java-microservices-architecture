@@ -32,6 +32,7 @@
         <module>Cards</module>
         <module>spring-cloud-config-server</module>
         <module>spring-eureka-server</module>
+        <module>spring-cloud-gateway-server</module>
     </modules>
 
     <scm>

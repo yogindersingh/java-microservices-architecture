@@ -1,0 +1,34 @@
+spring:
+  application:
+    name: spring-cloud-gateway-server
+  config:
+    import: ${SPRING_CONFIG_IMPORT:configserver:http://localhost:8071}
+  cloud:
+    gateway:
+      server:
+        webflux:
+          discovery:
+            locator:
+              enabled: false
+              lower-case-service-id: true
+
+application:
+  name: "@project.artifactId@"
+  version: "@project.version@"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    gateway:
+      access: unrestricted
+  info:
+    env:
+      enabled: true
+info:
+  app:
+    name: "spring-cloud-gateway-server"
+    description: "spring-cloud-gateway-server microservice"
+    version: "@project.version@"
