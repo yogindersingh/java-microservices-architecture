@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -88,7 +89,8 @@ public class AccountsController {
 
   @Operation(description = "fetch customer complete details")
   @GetMapping("/fetchCustomerDetails")
-  public ResponseEntity<ResponseDto> fetchCustomerDetails(@RequestParam(name = "mobileNumber") String mobileNumber) {
-    return new ResponseEntity<>(accountsService.getCustomerDetails(mobileNumber),HttpStatus.OK);
+  public ResponseEntity<ResponseDto> fetchCustomerDetails(@RequestParam(name = "mobileNumber") String mobileNumber,
+                                                          @RequestHeader(name = "X-Correlation-ID")  String correlationId) {
+    return new ResponseEntity<>(accountsService.getCustomerDetails(correlationId,mobileNumber),HttpStatus.OK);
   }
 }

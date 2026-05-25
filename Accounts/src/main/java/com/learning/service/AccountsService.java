@@ -12,5 +12,5 @@ public interface AccountsService {
 
   ResponseDto getAccountByMobileNumber(String mobileNumber);
 
-  ResponseDto getCustomerDetails(String mobileNumber);
+  ResponseDto getCustomerDetails(String correlationId,String mobileNumber);
 }

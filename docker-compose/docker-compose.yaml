@@ -80,6 +80,12 @@ services:
     container_name: accounts-ms
     ports:
       - "8080:8080"
+    healthcheck:
+      test: "curl --fail --silent localhost:8080/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     depends_on:
       spring-cloud-config-server:
         condition: service_healthy
@@ -92,13 +98,18 @@ services:
       service: microservice-configserver-config
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/accountsDb?createDatabaseIfNotExist=true
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://spring-eureka-server:8070/eureka/
 
   cards:
     image: yogindersingh634/cards:0.0.1-SNAPSHOT
     container_name: cards-ms
     ports:
       - "9001:9001"
+    healthcheck:
+      test: "curl --fail --silent localhost:9001/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     depends_on:
       spring-cloud-config-server:
         condition: service_healthy
@@ -111,13 +122,18 @@ services:
       service: microservice-configserver-config
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/cardsDb?createDatabaseIfNotExist=true
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://spring-eureka-server:8070/eureka/
 
   loans:
     image: yogindersingh634/loans:0.0.1-SNAPSHOT
     container_name: loans-ms
     ports:
       - "8090:8090"
+    healthcheck:
+      test: "curl --fail --silent localhost:8090/actuator/health/readiness | grep UP || exit 1"
+      interval: 20s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
     depends_on:
       spring-cloud-config-server:
         condition: service_healthy
@@ -129,9 +145,23 @@ services:
       file: common-config.yaml
       service: microservice-configserver-config
     environment:
-      JAVA_TOOL_OPTIONS: "-Xss256k -XX:+UseG1GC -XX:MaxRAMPercentage=70 -XX:InitialRAMPercentage=40 -XX:MaxDirectMemorySize=10M"
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/loansDb?createDatabaseIfNotExist=true
-      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://spring-eureka-server:8070/eureka/
+
+  spring-cloud-gateway-server:
+    image: yogindersingh634/spring-cloud-gateway-server:0.0.1-SNAPSHOT
+    container_name: spring-cloud-gateway-server
+    ports:
+      - "8072:8072"
+    depends_on:
+      loans:
+        condition: service_healthy
+      accounts:
+        condition: service_healthy
+      cards:
+        condition: service_healthy
+    extends:
+      file: common-config.yaml
+      service: microservice-configserver-config
 
 networks:
   common-network:

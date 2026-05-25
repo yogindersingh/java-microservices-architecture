@@ -34,29 +34,47 @@
     <build>
         <finalName>Loans</finalName>
         <plugins>
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>install</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>-->
+<!--                                build-image-->
+<!--                            </goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--                <configuration>-->
+<!--                    <image>-->
+<!--                    <name>${dockerhub.username}/loans:${project.version}</name>-->
+<!--                    </image>-->
+<!--                    <excludes>-->
+<!--                        <exclude>-->
+<!--                            <groupId>org.projectlombok</groupId>-->
+<!--                            <artifactId>lombok</artifactId>-->
+<!--                        </exclude>-->
+<!--                    </excludes>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <phase>install</phase>
                         <goals>
-                            <goal>
-                                build-image
-                            </goal>
+                            <goal>dockerBuild</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <image>
-                    <name>${dockerhub.username}/loans:${project.version}</name>
-                    </image>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
+                    <to>
+                        <image>${dockerhub.username}/loans:${project.version}</image>
+                    </to>
                 </configuration>
             </plugin>
             <plugin>

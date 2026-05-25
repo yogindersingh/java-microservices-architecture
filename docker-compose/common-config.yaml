@@ -16,3 +16,4 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: default
       SPRING_CONFIG_IMPORT: configserver:http://spring-cloud-config-server:8071/
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://spring-eureka-server:8070/eureka/

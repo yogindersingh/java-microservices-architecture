@@ -84,36 +84,21 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>docker-maven-plugin</artifactId>
-                <version>0.39.0</version>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.5.1</version>
                 <executions>
                     <execution>
-                        <configuration>
-                            <verbose>true</verbose>
-                            <imagePullPolicy>Always</imagePullPolicy>
-                            <images>
-                                <image>
-                                    <name>${dockerhub.username}/accounts:${project.version}</name>
-                                    <build>
-                                        <dockerFile>${project.build.directory}/classes/Dockerfile</dockerFile>
-                                        <contextDir>${basedir}</contextDir>
-                                        <network>host</network>
-                                    </build>
-                                </image>
-                            </images>
-                        </configuration>
-                        <goals>
-                            <goal>build</goal>
-                            <goal>push</goal>
-                        </goals>
                         <phase>install</phase>
+                        <goals>
+                            <goal>dockerBuild</goal>
+                        </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <buildArgs>
-                        <profile>dmp</profile>
-                    </buildArgs>
+                    <to>
+                        <image>${dockerhub.username}/accounts:${project.version}</image>
+                    </to>
                 </configuration>
             </plugin>
         </plugins>

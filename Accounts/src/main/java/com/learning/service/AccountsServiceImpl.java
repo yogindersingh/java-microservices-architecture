@@ -11,15 +11,14 @@ import com.learning.exceptions.ResourceNotFountException;
 import com.learning.mapper.MapperUtil;
 import com.learning.repository.AccountRepository;
 import com.learning.repository.CustomerRepository;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 public class AccountsServiceImpl implements AccountsService {
 
@@ -76,7 +75,8 @@ public class AccountsServiceImpl implements AccountsService {
   }
 
   @Override
-  public ResponseDto getCustomerDetails(String mobileNumber) {
+  public ResponseDto getCustomerDetails(String correlationId,String mobileNumber) {
+    log.info("X-Correlation-ID found : {}", correlationId);
     Customer customer = customerRepository.findByMobileNumber(mobileNumber).orElseThrow(()->
         new ResourceNotFountException(
             "Customer not " +
@@ -88,9 +88,9 @@ public class AccountsServiceImpl implements AccountsService {
     AccountsDto accountsDto = MapperUtil.mapAccountsToAccountsDto(accounts);
     CustomerDetailsDto customerDetailsDto = MapperUtil.mapCustomerToCustomerDetailsDto(customer);
     customerDetailsDto.setAccountsDetails(accountsDto);
-    ResponseEntity<ResponseDto> cards = cardsFeignClient.fetchCard(customer.getMobileNumber());
+    ResponseEntity<ResponseDto> cards = cardsFeignClient.fetchCard(correlationId,customer.getMobileNumber());
     customerDetailsDto.setCardsDetails(cards.getBody().getBody());
-    ResponseEntity<ResponseDto> loans=loansFeignClient.fetchLoan(customer.getMobileNumber());
+    ResponseEntity<ResponseDto> loans=loansFeignClient.fetchLoan(correlationId,customer.getMobileNumber());
     customerDetailsDto.setLoansDetails(loans.getBody().getBody());
     return new  ResponseDto(customerDetailsDto,HttpStatus.OK);
   }

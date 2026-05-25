@@ -6,12 +6,14 @@ import jakarta.validation.constraints.Size;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient("loans")
 public interface LoansFeignClient {
 
   @GetMapping("/v1/fetch")
-  public ResponseEntity<ResponseDto> fetchLoan(@RequestParam String mobileNumber);
+  public ResponseEntity<ResponseDto> fetchLoan(@RequestHeader(name = "X-Correlation-ID")   String correlationId,
+                                               @RequestParam String mobileNumber);
 
 }
