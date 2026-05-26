@@ -42,6 +42,10 @@ spring:
     port: 5672
     username: "guest"
     password: "guest"
+  cloud:
+    openfeign:
+      circuitbreaker:
+        enabled: true
 #      data-locations: classpath:datacustom.sql
 
 eureka:
@@ -77,3 +81,13 @@ info:
     name: "accounts"
     description: "Accounts microservice"
     version: "@project.version@"
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 10
+        failure-rate-threshold: 50
+        permitted-number-of-calls-in-half-open-state: 2
+        wait-duration-in-open-state:
+          seconds: 1

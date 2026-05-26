@@ -5,6 +5,7 @@ import com.learning.dto.ErrorResponseDto;
 import com.learning.dto.LoansContactInfoDto;
 import com.learning.dto.ResponseDto;
 import com.learning.service.ILoansService;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -75,8 +76,13 @@ public class LoansController {
 
   @Operation(description = "Fetch java version")
   @GetMapping("/java-version")
+  @RateLimiter(name = "getJavaVersion",fallbackMethod = "getJavaVersionFallBack")
   public ResponseEntity<ResponseDto> getJavaVersion() {
     return new ResponseEntity<>(new ResponseDto(environment.getProperty("java.version"),HttpStatus.OK), HttpStatus.OK);
+  }
+
+  public ResponseEntity<ResponseDto> getJavaVersionFallBack(Throwable throwable) {
+    return new ResponseEntity<>(new ResponseDto("Java 17 (Fallback response)",HttpStatus.OK), HttpStatus.OK);
   }
 
   @Operation(description = "Fetch contact information")

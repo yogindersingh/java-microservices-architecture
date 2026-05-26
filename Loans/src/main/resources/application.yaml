@@ -78,3 +78,13 @@ info:
     name: "loans"
     description: "Loans microservice"
     version: "@project.version@"
+
+resilience4j:
+  ratelimiter:
+    configs:
+      default:
+        timeout-duration:
+          seconds: 5
+        limit-for-period: 1
+        limit-refresh-period:
+          seconds: 5

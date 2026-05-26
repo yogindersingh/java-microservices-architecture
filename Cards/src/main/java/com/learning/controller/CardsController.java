@@ -5,6 +5,7 @@ import com.learning.dto.CardsDto;
 import com.learning.dto.ErrorResponseDto;
 import com.learning.dto.ResponseDto;
 import com.learning.service.ICardsService;
+import io.github.resilience4j.retry.annotation.Retry;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -69,8 +70,13 @@ public class CardsController {
 
   @Operation(description = "Fetch build information")
   @GetMapping("/build-info")
+  @Retry(name = "getBuild", fallbackMethod = "getbuildInfoFallBack")
   public ResponseEntity<ResponseDto> getBuildInfo() {
     return new ResponseEntity<>(new ResponseDto(buildInfo,HttpStatus.OK), HttpStatus.OK);
+  }
+
+  public ResponseEntity<ResponseDto> getbuildInfoFallBack(Throwable throwable) {
+    return new ResponseEntity<>(new ResponseDto("fallback build response",HttpStatus.OK), HttpStatus.OK);
   }
 
   @Operation(description = "Fetch java version")
