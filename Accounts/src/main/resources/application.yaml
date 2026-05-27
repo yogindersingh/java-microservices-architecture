@@ -68,6 +68,8 @@ management:
     health:
       probes:
         enabled: true
+    prometheus:
+      access: unrestricted
   info:
     env:
       enabled: true

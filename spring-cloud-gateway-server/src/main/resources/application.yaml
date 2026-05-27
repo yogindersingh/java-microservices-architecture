@@ -11,6 +11,9 @@ spring:
             locator:
               enabled: false
               lower-case-service-id: true
+          httpclient:
+            connect-timeout: 1000
+            response-timeout: 10s
   data:
     redis:
       host: ${SPRING_DATA_REDIS_HOST:localhost}
