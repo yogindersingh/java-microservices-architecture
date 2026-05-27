@@ -147,6 +147,20 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/loansDb?createDatabaseIfNotExist=true
 
+  redis:
+    image: redis:7.4-alpine
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    command: redis-server --requirepass password --appendonly yes
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
   spring-cloud-gateway-server:
     image: yogindersingh634/spring-cloud-gateway-server:0.0.1-SNAPSHOT
     container_name: spring-cloud-gateway-server
@@ -159,6 +173,10 @@ services:
         condition: service_healthy
       cards:
         condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      SPRING_DATA_REDIS_HOST: redis
     extends:
       file: common-config.yaml
       service: microservice-configserver-config
