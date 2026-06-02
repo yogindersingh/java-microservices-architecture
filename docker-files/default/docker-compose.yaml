@@ -91,6 +91,19 @@ services:
       file: common-config.yaml
       service: network-service
 
+  tempo:
+    image: grafana/tempo:2.9.0
+    container_name: tempo
+    command: -config.file /etc/tempo-config.yml
+    ports:
+      - "3110:3100"
+      - "4318:4318"
+    volumes:
+      - ../observability/tempo/tempo.yml:/etc/tempo-config.yml
+    extends:
+      file: common-config.yaml
+      service: network-service
+
   grafana:
     image: grafana/grafana:12.3.0
     environment:
@@ -238,7 +251,7 @@ services:
       service: network-service
 
   spring-cloud-config-server:
-    image: yogindersingh634/spring-cloud-config-server:0.0.2-SNAPSHOT
+    image: yogindersingh634/spring-cloud-config-server:0.0.3-SNAPSHOT
     hostname: spring-cloud-config-server
     container_name: spring-cloud-config-server
     ports:
@@ -257,7 +270,7 @@ services:
       service: microservice-base-config
 
   spring-eureka-server:
-    image: yogindersingh634/spring-eureka-server:0.0.2-SNAPSHOT
+    image: yogindersingh634/spring-eureka-server:0.0.3-SNAPSHOT
     hostname: spring-eureka-server
     container_name: spring-eureka-server
     ports:
@@ -278,7 +291,7 @@ services:
       SPRING_CONFIG_IMPORT: configserver:http://spring-cloud-config-server:8071/
 
   accounts:
-    image: yogindersingh634/accounts:0.0.2-SNAPSHOT
+    image: yogindersingh634/accounts:0.0.3-SNAPSHOT
     container_name: accounts-ms
     ports:
       - "8080:8080"
@@ -302,7 +315,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/accountsDb?createDatabaseIfNotExist=true
 
   cards:
-    image: yogindersingh634/cards:0.0.2-SNAPSHOT
+    image: yogindersingh634/cards:0.0.3-SNAPSHOT
     container_name: cards-ms
     ports:
       - "9001:9001"
@@ -326,7 +339,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/cardsDb?createDatabaseIfNotExist=true
 
   loans:
-    image: yogindersingh634/loans:0.0.2-SNAPSHOT
+    image: yogindersingh634/loans:0.0.3-SNAPSHOT
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -364,7 +377,7 @@ services:
       start_period: 5s
 
   spring-cloud-gateway-server:
-    image: yogindersingh634/spring-cloud-gateway-server:0.0.2-SNAPSHOT
+    image: yogindersingh634/spring-cloud-gateway-server:0.0.3-SNAPSHOT
     container_name: spring-cloud-gateway-server
     ports:
       - "8072:8072"

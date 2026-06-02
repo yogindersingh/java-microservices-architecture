@@ -12,7 +12,7 @@
 
     <groupId>com.learning</groupId>
     <artifactId>java-microservices-architecture</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name/>
@@ -46,6 +46,7 @@
         <java.version>17</java.version>
         <dockerhub.username>yogindersingh634</dockerhub.username>
         <spring-cloud.version>2025.1.1</spring-cloud.version>
+        <otelVersion>2.22.0</otelVersion>
     </properties>
 
 
@@ -130,6 +131,12 @@
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.opentelemetry.javaagent</groupId>
+            <artifactId>opentelemetry-javaagent</artifactId>
+            <version>${otelVersion}</version>
+            <scope>runtime</scope>
         </dependency>
     </dependencies>
 

@@ -93,3 +93,7 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 2
         wait-duration-in-open-state:
           seconds: 1
+
+logging:
+  pattern:
+    level: "%5p [${spring.application.name},%X{trace_id},%X{span_id}]"
