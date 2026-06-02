@@ -251,7 +251,7 @@ services:
       service: network-service
 
   spring-cloud-config-server:
-    image: yogindersingh634/spring-cloud-config-server:0.0.3-SNAPSHOT
+    image: yogindersingh634/spring-cloud-config-server:0.0.4-SNAPSHOT
     hostname: spring-cloud-config-server
     container_name: spring-cloud-config-server
     ports:
@@ -270,7 +270,7 @@ services:
       service: microservice-base-config
 
   spring-eureka-server:
-    image: yogindersingh634/spring-eureka-server:0.0.3-SNAPSHOT
+    image: yogindersingh634/spring-eureka-server:0.0.4-SNAPSHOT
     hostname: spring-eureka-server
     container_name: spring-eureka-server
     ports:
@@ -291,7 +291,7 @@ services:
       SPRING_CONFIG_IMPORT: configserver:http://spring-cloud-config-server:8071/
 
   accounts:
-    image: yogindersingh634/accounts:0.0.3-SNAPSHOT
+    image: yogindersingh634/accounts:0.0.4-SNAPSHOT
     container_name: accounts-ms
     ports:
       - "8080:8080"
@@ -315,7 +315,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/accountsDb?createDatabaseIfNotExist=true
 
   cards:
-    image: yogindersingh634/cards:0.0.3-SNAPSHOT
+    image: yogindersingh634/cards:0.0.4-SNAPSHOT
     container_name: cards-ms
     ports:
       - "9001:9001"
@@ -339,7 +339,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqlDb:3306/cardsDb?createDatabaseIfNotExist=true
 
   loans:
-    image: yogindersingh634/loans:0.0.3-SNAPSHOT
+    image: yogindersingh634/loans:0.0.4-SNAPSHOT
     container_name: loans-ms
     ports:
       - "8090:8090"
@@ -376,8 +376,21 @@ services:
       retries: 5
       start_period: 5s
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.4.7
+    container_name: keycloak
+    ports:
+      - "127.0.0.1:7080:8080"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: "admin"
+      KC_BOOTSTRAP_ADMIN_PASSWORD: "admin"
+    command: "start-dev"
+    extends:
+      file: common-config.yaml
+      service: network-service
+
   spring-cloud-gateway-server:
-    image: yogindersingh634/spring-cloud-gateway-server:0.0.3-SNAPSHOT
+    image: yogindersingh634/spring-cloud-gateway-server:0.0.4-SNAPSHOT
     container_name: spring-cloud-gateway-server
     ports:
       - "8072:8072"
@@ -392,6 +405,7 @@ services:
         condition: service_healthy
     environment:
       SPRING_DATA_REDIS_HOST: redis
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWT_SET_URI: http://keycloak:8080/realms/master/protocol/openid-connect/certs
     extends:
       file: common-config.yaml
       service: microservice-configserver-config
