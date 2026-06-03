@@ -11,6 +11,11 @@ spring:
           group: ${spring.application.name}
         emailsms-out-0:
           destination: accounts-connection
+#          property if we want to use kafka and also dependency for kafka binder
+#      kafka:
+#        binder:
+#          brokers:
+#            - localhost:9092
   rabbitmq:
     host: "localhost"
     port: 5672
