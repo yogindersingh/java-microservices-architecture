@@ -308,6 +308,8 @@ services:
         condition: service_healthy
       spring-eureka-server:
         condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
     extends:
       file: common-config.yaml
       service: microservice-configserver-config
@@ -409,6 +411,20 @@ services:
     extends:
       file: common-config.yaml
       service: microservice-configserver-config
+
+  message:
+    image: yogindersingh634/message:0.0.1-SNAPSHOT
+    container_name: message
+    ports:
+      - "9011:9011"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    extends:
+      file: common-config.yaml
+      service: network-service
+    environment:
+      SPRING_RABBITMQ_HOST: "rabbitmq"
 
 networks:
   common-network:

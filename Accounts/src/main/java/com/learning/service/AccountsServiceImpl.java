@@ -1,5 +1,6 @@
 package com.learning.service;
 
+import com.learning.dto.AccountMessageDto;
 import com.learning.dto.AccountsDto;
 import com.learning.dto.CustomerDetailsDto;
 import com.learning.dto.CustomerDto;
@@ -14,6 +15,7 @@ import com.learning.repository.CustomerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,9 @@ public class AccountsServiceImpl implements AccountsService {
   @Autowired
   LoansFeignClient loansFeignClient;
 
+  @Autowired
+  StreamBridge streamBridge;
+
   /**
    *
    * @param customerDto
@@ -51,6 +56,9 @@ public class AccountsServiceImpl implements AccountsService {
     accounts.setCustomerId(customer.getCustomerId());
     accounts.setAccountNumber(((long) (Math.random() * 900000L) + 100000L));
     accountRepository.save(accounts);
+    AccountMessageDto accountMessageDto=new AccountMessageDto(customer.getName(),customer.getEmail(),accounts.getAccountNumber());
+    boolean resp = streamBridge.send("email-sms", accountMessageDto);
+    log.info("successfully send email sms : {}",resp);
     return new ResponseDto("Account Created successfully", HttpStatus.CREATED);
   }
 

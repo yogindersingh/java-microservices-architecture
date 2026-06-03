@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: message
+  cloud:
+    function:
+      definition: email|sms
+    stream:
+      bindings:
+        emailsms-in-0:
+          destination: email-sms
+          group: ${spring.application.name}
+        emailsms-out-0:
+          destination: accounts-connection
+  rabbitmq:
+    host: "localhost"
+    port: 5672
+    username: "guest"
+    password: "guest"
+
+server:
+  port: 9011

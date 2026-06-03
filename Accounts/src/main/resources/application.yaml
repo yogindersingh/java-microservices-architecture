@@ -46,6 +46,17 @@ spring:
     openfeign:
       circuitbreaker:
         enabled: true
+    function:
+      definition: messageConsumer
+    stream:
+      bindings:
+        email-sms-binding:
+          destination: email-sms
+          group: ${spring.application.name}
+        messageConsumer-in-0:
+          destination: accounts-connection
+          group: ${spring.application.name}
+
 #      data-locations: classpath:datacustom.sql
 
 eureka:

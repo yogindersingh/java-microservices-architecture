@@ -33,6 +33,7 @@
         <module>spring-cloud-config-server</module>
         <module>spring-eureka-server</module>
         <module>spring-cloud-gateway-server</module>
+        <module>message</module>
     </modules>
 
     <scm>
