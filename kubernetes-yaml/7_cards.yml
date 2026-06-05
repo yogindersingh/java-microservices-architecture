@@ -35,6 +35,13 @@ spec:
             configMapKeyRef:
               name: bank-configmap
               key: EUREKA_CLIENT_SERVICEURL_DEFAULTZONE
+        - name: SPRING_DATASOURCE_URL
+          value: jdbc:mysql://mysql:3306/cardsDb?createDatabaseIfNotExist=true
+        - name: SPRING_RABBITMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: bank-configmap
+              key: SPRING_RABBITMQ_HOST
 ---
 apiVersion: v1
 kind: Service

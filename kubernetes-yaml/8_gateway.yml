@@ -40,6 +40,11 @@ spec:
             configMapKeyRef:
               name: bank-configmap
               key: SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK-SET-URI
+        - name: SPRING_RABBITMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: bank-configmap
+              key: SPRING_RABBITMQ_HOST
 ---
 apiVersion: v1
 kind: Service

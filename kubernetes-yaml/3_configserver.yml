@@ -19,6 +19,12 @@ spec:
         image: yogindersingh634/spring-cloud-config-server:0.0.4-SNAPSHOT
         ports:
         - containerPort: 8071
+        env:
+        - name: SPRING_RABBITMQ_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: bank-configmap
+              key: SPRING_RABBITMQ_HOST
 ---
 apiVersion: v1
 kind: Service
