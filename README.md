@@ -60,7 +60,7 @@ RabbitMQ
 - **Metrics:** Micrometer → Prometheus → Grafana
 - **Logs:** Loki + Alloy
 - **Rate limiting:** Redis
-- **Build/image:** Maven + Google Jib → DockerHub (`yogindersingh634/`)
+- **Build/image:** Maven + Google Jib → DockerHub (`yogindersingh634/`), image tag `0.0.4-SNAPSHOT`
 
 ---
 
@@ -110,6 +110,28 @@ Files are numbered to reflect deployment order (Keycloak → ConfigMaps → Conf
 kubectl apply -f kubernetes-yaml/          # deploy all
 kubectl apply -f kubernetes-yaml/5_accounts.yml   # deploy one service
 ```
+
+### Helm
+
+A single umbrella chart (`helm/`) covers all services and infrastructure. Each component (accounts, cards, loans, gateway, config-server, eureka-server, message, keycloak, mysql, rabbitmq, redis) has its own sub-template under `helm/templates/`. Toggle components on/off and override images or resource limits via `helm/values.yaml`.
+
+```bash
+# Install (from repo root)
+helm install java-microservices ./helm
+
+# Upgrade
+helm upgrade java-microservices ./helm
+
+# Override a value inline
+helm upgrade java-microservices ./helm --set accounts.image.tag=0.0.5-SNAPSHOT
+
+# Dry-run / template preview
+helm template java-microservices ./helm
+```
+
+Current image tag across services: `0.0.4-SNAPSHOT` (DockerHub: `yogindersingh634/<service>`).
+
+> **Note:** The Gateway and Keycloak services are exposed via `NodePort` (30072 and 30780 respectively). All other services use `ClusterIP`.
 
 ---
 
