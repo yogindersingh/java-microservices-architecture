@@ -1,0 +1,19 @@
+{{- if .Values.loans.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: loans
+  labels:
+    {{- include "java-microservices.labels" . | nindent 4 }}
+    app.kubernetes.io/name: loans
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.loans.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: loans
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

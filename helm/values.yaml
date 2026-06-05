@@ -1,0 +1,219 @@
+nameOverride: ""
+fullnameOverride: ""
+
+# Common env vars inherited by all Spring Boot microservices
+commonEnv:
+  springRabbitmqHost: "rabbitmq"
+  javaToolOptions: "-javaagent:/app/libs/opentelemetry-javaagent-2.22.0.jar"
+  otelExporterOtlpEndpoint: "http://tempo:4318"
+  otelMetricsExporter: "none"
+  otelLogsExporter: "none"
+  # Added by microservice-configserver-config
+  springProfilesActive: "default"
+  configServerUrl: "configserver:http://spring-cloud-config-server:8071/"
+  eurekaDefaultZone: "http://spring-eureka-server:8070/eureka/"
+
+mysql:
+  enabled: true
+  image:
+    repository: mysql
+    tag: "latest"
+    pullPolicy: IfNotPresent
+  service:
+    port: 3306
+  persistence:
+    enabled: true
+    size: 1Gi
+    storageClass: ""
+  auth:
+    rootPassword: "root@1234"
+  resources:
+    limits:
+      memory: 512Mi
+      cpu: "500m"
+    requests:
+      memory: 256Mi
+      cpu: "250m"
+
+rabbitmq:
+  enabled: true
+  image:
+    repository: rabbitmq
+    tag: "3.12-management"
+    pullPolicy: IfNotPresent
+  service:
+    amqpPort: 5672
+    managementPort: 15672
+  resources:
+    limits:
+      memory: 700Mi
+      cpu: "500m"
+    requests:
+      memory: 256Mi
+      cpu: "250m"
+
+redis:
+  enabled: true
+  image:
+    repository: redis
+    tag: "7.4-alpine"
+    pullPolicy: IfNotPresent
+  service:
+    port: 6379
+  auth:
+    password: "password"
+  resources:
+    limits:
+      memory: 256Mi
+      cpu: "250m"
+    requests:
+      memory: 128Mi
+      cpu: "100m"
+
+keycloak:
+  enabled: true
+  image:
+    repository: quay.io/keycloak/keycloak
+    tag: "26.4.7"
+    pullPolicy: IfNotPresent
+  service:
+    port: 8080
+    type: NodePort
+    nodePort: 30780
+  auth:
+    adminUsername: "admin"
+    adminPassword: "admin"
+  resources:
+    limits:
+      memory: 1Gi
+      cpu: "1000m"
+    requests:
+      memory: 512Mi
+      cpu: "500m"
+
+configServer:
+  enabled: true
+  image:
+    repository: yogindersingh634/spring-cloud-config-server
+    tag: "0.0.4-SNAPSHOT"
+    pullPolicy: IfNotPresent
+  service:
+    port: 8071
+  resources:
+    limits:
+      memory: 700Mi
+      cpu: "500m"
+    requests:
+      memory: 256Mi
+      cpu: "250m"
+
+eurekaServer:
+  enabled: true
+  image:
+    repository: yogindersingh634/spring-eureka-server
+    tag: "0.0.4-SNAPSHOT"
+    pullPolicy: IfNotPresent
+  service:
+    port: 8070
+  env:
+    springConfigImport: "configserver:http://spring-cloud-config-server:8071/"
+  resources:
+    limits:
+      memory: 700Mi
+      cpu: "500m"
+    requests:
+      memory: 256Mi
+      cpu: "250m"
+
+accounts:
+  enabled: true
+  image:
+    repository: yogindersingh634/accounts
+    tag: "0.0.4-SNAPSHOT"
+    pullPolicy: IfNotPresent
+  service:
+    port: 8080
+  env:
+    datasourceUrl: "jdbc:mysql://mysqldb:3306/accountsDb?createDatabaseIfNotExist=true"
+  resources:
+    limits:
+      memory: 700Mi
+      cpu: "500m"
+    requests:
+      memory: 256Mi
+      cpu: "250m"
+
+cards:
+  enabled: true
+  image:
+    repository: yogindersingh634/cards
+    tag: "0.0.4-SNAPSHOT"
+    pullPolicy: IfNotPresent
+  service:
+    port: 9001
+  env:
+    datasourceUrl: "jdbc:mysql://mysqldb:3306/cardsDb?createDatabaseIfNotExist=true"
+  resources:
+    limits:
+      memory: 700Mi
+      cpu: "500m"
+    requests:
+      memory: 256Mi
+      cpu: "250m"
+
+loans:
+  enabled: true
+  image:
+    repository: yogindersingh634/loans
+    tag: "0.0.4-SNAPSHOT"
+    pullPolicy: IfNotPresent
+  service:
+    port: 8090
+  env:
+    datasourceUrl: "jdbc:mysql://mysqldb:3306/loansDb?createDatabaseIfNotExist=true"
+  resources:
+    limits:
+      memory: 700Mi
+      cpu: "500m"
+    requests:
+      memory: 256Mi
+      cpu: "250m"
+
+gateway:
+  enabled: true
+  image:
+    repository: yogindersingh634/spring-cloud-gateway-server
+    tag: "0.0.4-SNAPSHOT"
+    pullPolicy: IfNotPresent
+  service:
+    port: 8072
+    type: NodePort
+    nodePort: 30072
+  env:
+    redisHost: "redis"
+    jwtSetUri: "http://keycloak:8080/realms/master/protocol/openid-connect/certs"
+  resources:
+    limits:
+      memory: 700Mi
+      cpu: "500m"
+    requests:
+      memory: 256Mi
+      cpu: "250m"
+
+message:
+  enabled: true
+  image:
+    repository: yogindersingh634/message
+    tag: "0.0.1-SNAPSHOT"
+    pullPolicy: IfNotPresent
+  service:
+    port: 9011
+  env:
+    springRabbitmqHost: "rabbitmq"
+  resources:
+    limits:
+      memory: 700Mi
+      cpu: "500m"
+    requests:
+      memory: 256Mi
+      cpu: "250m"

@@ -1,0 +1,53 @@
+{{- if .Values.configServer.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-config-server
+  labels:
+    {{- include "java-microservices.labels" . | nindent 4 }}
+    app.kubernetes.io/name: spring-cloud-config-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: spring-cloud-config-server
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: spring-cloud-config-server
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: spring-cloud-config-server
+          image: "{{ .Values.configServer.image.repository }}:{{ .Values.configServer.image.tag }}"
+          imagePullPolicy: {{ .Values.configServer.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8071
+              protocol: TCP
+          env:
+            {{- include "java-microservices.microserviceBaseEnv" . | nindent 12 }}
+          livenessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "curl --fail --silent localhost:8071/actuator/health | grep UP"
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            exec:
+              command:
+                - sh
+                - -c
+                - "curl --fail --silent localhost:8071/accounts/default | grep propertySources"
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.configServer.resources | nindent 12 }}
+{{- end }}

@@ -1,0 +1,19 @@
+{{- if .Values.accounts.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: accounts
+  labels:
+    {{- include "java-microservices.labels" . | nindent 4 }}
+    app.kubernetes.io/name: accounts
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.accounts.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: accounts
+    app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end }}

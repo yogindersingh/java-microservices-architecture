@@ -1,0 +1,51 @@
+{{- if .Values.cards.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-cards
+  labels:
+    {{- include "java-microservices.labels" . | nindent 4 }}
+    app.kubernetes.io/name: cards
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: cards
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: cards
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: cards
+          image: "{{ .Values.cards.image.repository }}:{{ .Values.cards.image.tag }}"
+          imagePullPolicy: {{ .Values.cards.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 9001
+              protocol: TCP
+          env:
+            {{- include "java-microservices.configServerEnv" . | nindent 12 }}
+            - name: SPRING_DATASOURCE_URL
+              value: {{ .Values.cards.env.datasourceUrl | quote }}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            initialDelaySeconds: 90
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 5
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 20
+            timeoutSeconds: 10
+            failureThreshold: 5
+          resources:
+            {{- toYaml .Values.cards.resources | nindent 12 }}
+{{- end }}

@@ -1,0 +1,51 @@
+{{- if .Values.eurekaServer.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-eureka-server
+  labels:
+    {{- include "java-microservices.labels" . | nindent 4 }}
+    app.kubernetes.io/name: spring-eureka-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: spring-eureka-server
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: spring-eureka-server
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: spring-eureka-server
+          image: "{{ .Values.eurekaServer.image.repository }}:{{ .Values.eurekaServer.image.tag }}"
+          imagePullPolicy: {{ .Values.eurekaServer.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8070
+              protocol: TCP
+          env:
+            {{- include "java-microservices.microserviceBaseEnv" . | nindent 12 }}
+            - name: SPRING_CONFIG_IMPORT
+              value: {{ .Values.eurekaServer.env.springConfigImport | quote }}
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: 60
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.eurekaServer.resources | nindent 12 }}
+{{- end }}

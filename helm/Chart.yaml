@@ -1,0 +1,12 @@
+apiVersion: v2
+name: java-microservices
+description: Helm chart for Java microservices architecture
+type: application
+version: 0.1.0
+appVersion: "0.0.4-SNAPSHOT"
+keywords:
+  - java
+  - spring-boot
+  - microservices
+maintainers:
+  - name: yogindersingh
